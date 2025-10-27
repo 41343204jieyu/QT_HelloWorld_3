@@ -19,6 +19,7 @@ DesignWidget::DesignWidget(QWidget *parent)
     pagePushBtn = new QPushButton(QStringLiteral("頁面對話盒"));
     progressPushBtn = new QPushButton(QStringLiteral("進度對話盒"));
     printPushBtn = new QPushButton(QStringLiteral("列印對話盒"));
+    textcolorPushBtn = new QPushButton(QStringLiteral("文字顏色對話盒"));
 
     gridLayout->addWidget(colorPushBtn,0,0,1,1);
     gridLayout->addWidget(errorPushBtn,0,1,1,1);
@@ -29,6 +30,7 @@ DesignWidget::DesignWidget(QWidget *parent)
     gridLayout->addWidget(progressPushBtn,2,0,1,1);
     gridLayout->addWidget(printPushBtn,2,1,1,1);
     gridLayout->addWidget(displayTextEdit,3,0,3,3);
+    gridLayout->addWidget(textcolorPushBtn,2,2,1,1);
 
     setLayout(gridLayout);
     setWindowTitle(QStringLiteral("內建對話盒展示"));
@@ -42,8 +44,25 @@ DesignWidget::DesignWidget(QWidget *parent)
     connect(pagePushBtn,SIGNAL(clicked()),this,SLOT(doPushBtn()));
     connect(progressPushBtn,SIGNAL(clicked()),this,SLOT(doPushBtn()));
     connect(printPushBtn,SIGNAL(clicked()),this,SLOT(doPushBtn()));
+    connect(textcolorPushBtn,SIGNAL(clicked()),this,SLOT(dotextBtn()));
 
 }
+void DesignWidget::dotextBtn()
+{
+    QColor currentColor = displayTextEdit->textColor();
+    QColor color = QColorDialog::getColor(currentColor, this, QStringLiteral("設定文字顏色"));
+    if(color.isValid())
+    {
+        QTextCharFormat fmt;
+        fmt.setForeground(color);
+
+        QTextCursor cursor = displayTextEdit->textCursor();
+        cursor.select(QTextCursor::Document);
+        cursor.mergeCharFormat(fmt);
+        displayTextEdit->mergeCurrentCharFormat(fmt);
+    }
+}
+
 void DesignWidget :: doPushBtn()
 {
     QPushButton* btn = qobject_cast<QPushButton*>(sender());

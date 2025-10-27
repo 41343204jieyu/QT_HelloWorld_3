@@ -21,7 +21,9 @@ private:
     QPushButton *pagePushBtn;
     QPushButton *progressPushBtn;
     QPushButton *printPushBtn;
+    QPushButton *textcolorPushBtn;
 private slots:
     void doPushBtn();
+    void dotextBtn();
 };
 #endif // DESIGNWIDGET_H
