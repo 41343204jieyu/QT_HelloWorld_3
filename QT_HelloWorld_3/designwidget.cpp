@@ -66,7 +66,11 @@ void DesignWidget :: doPushBtn()
                     QStringLiteral("打開檔案"),".",QStringLiteral("任何檔案(*.*)"";;文字檔(*.txt)"";;XML檔(*.xml)"));
         displayTextEdit->setText(fileName);
     }
-
+    if(btn==fontPushBtn){
+        bool ok;
+        const QFont &font = QFontDialog::getFont(&ok,displayTextEdit->font(),this,QStringLiteral("字體對話盒"));
+        if(ok) displayTextEdit->setFont(font);
+    }
 }
 DesignWidget :: ~DesignWidget()
 {
