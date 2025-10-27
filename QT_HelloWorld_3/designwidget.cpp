@@ -112,6 +112,13 @@ void DesignWidget :: doPushBtn()
         progress.setValue(10000);
     }
 
+    if(btn==printPushBtn){
+        QPrinter printer(QPrinter::HighResolution);
+        QPrintDialog dialog(&printer,this);
+        if(dialog.exec()!=QDialog::Accepted)
+            return;
+    }
+
 }
 DesignWidget :: ~DesignWidget()
 {
