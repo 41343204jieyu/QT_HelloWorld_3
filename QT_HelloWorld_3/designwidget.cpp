@@ -63,13 +63,19 @@ void DesignWidget :: doPushBtn()
     }
     if(btn==filePushBtn){
         QString fileName = QFileDialog::getOpenFileName(this,
-                    QStringLiteral("打開檔案"),".",QStringLiteral("任何檔案(*.*)"";;文字檔(*.txt)"";;XML檔(*.xml)"));
+                        QStringLiteral("打開檔案"),".",QStringLiteral("任何檔案(*.*)"";;文字檔(*.txt)"";;XML檔(*.xml)"));
         displayTextEdit->setText(fileName);
     }
     if(btn==fontPushBtn){
         bool ok;
         const QFont &font = QFontDialog::getFont(&ok,displayTextEdit->font(),this,QStringLiteral("字體對話盒"));
         if(ok) displayTextEdit->setFont(font);
+    }
+    if(btn==inputPushBtn){
+        bool ok;
+        QString text = QInputDialog::getText(this,
+                    QStringLiteral("輸入對話盒"),QStringLiteral("輸入文字"),QLineEdit::Normal,QDir::home().dirName(),&ok);
+        if(ok&&!text.isEmpty())displayTextEdit->setText(text);
     }
 }
 DesignWidget :: ~DesignWidget()
