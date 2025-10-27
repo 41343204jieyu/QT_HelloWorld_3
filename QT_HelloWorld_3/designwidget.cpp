@@ -1,5 +1,9 @@
 #include "designwidget.h"
 #include <QGridLayout>
+#include<QtPrintSupport/qprinter.h>
+#include<QtPrintSupport/qpagesetupdialog.h>
+#include<QtPrintSupport/QPrintDialog>
+#include<QtPrintSupport/QPrintPreviewDialog>
 
 DesignWidget::DesignWidget(QWidget *parent)
     : QDialog(parent)
@@ -43,6 +47,7 @@ DesignWidget::DesignWidget(QWidget *parent)
 void DesignWidget :: doPushBtn()
 {
     QPushButton* btn = qobject_cast<QPushButton*>(sender());
+
     if(btn==colorPushBtn){
         QPalette palette=displayTextEdit->palette();
         const QColor& color=
@@ -53,6 +58,7 @@ void DesignWidget :: doPushBtn()
             displayTextEdit->setPalette(palette);
         }
     }
+
     if(btn==errorPushBtn){
         QErrorMessage box(this);
         box.setWindowTitle(QStringLiteral("錯誤訊息盒"));
@@ -61,26 +67,54 @@ void DesignWidget :: doPushBtn()
         box.showMessage(QStringLiteral("錯誤訊息盒實例zz:"));
         box.exec();
     }
+
     if(btn==filePushBtn){
         QString fileName = QFileDialog::getOpenFileName(this,
                         QStringLiteral("打開檔案"),".",QStringLiteral("任何檔案(*.*)"";;文字檔(*.txt)"";;XML檔(*.xml)"));
         displayTextEdit->setText(fileName);
     }
+
     if(btn==fontPushBtn){
         bool ok;
         const QFont &font = QFontDialog::getFont(&ok,displayTextEdit->font(),this,QStringLiteral("字體對話盒"));
         if(ok) displayTextEdit->setFont(font);
     }
+
     if(btn==inputPushBtn){
         bool ok;
         QString text = QInputDialog::getText(this,
                     QStringLiteral("輸入對話盒"),QStringLiteral("輸入文字"),QLineEdit::Normal,QDir::home().dirName(),&ok);
         if(ok&&!text.isEmpty())displayTextEdit->setText(text);
     }
+
+    if(btn==pagePushBtn){
+        QPrinter printer (QPrinter::HighResolution);
+        QPageSetupDialog* dig =new QPageSetupDialog(&printer,this);
+        dig-> setWindowTitle (QStringLiteral("頁面設定對話方塊"));
+        if(dig -> exec()==QDialog::Accepted)
+        {
+
+        }
+    }
+
+    if(btn==progressPushBtn){
+        QProgressDialog progress(QStringLiteral("正在複製檔案..."),
+                                 QStringLiteral("取消"),0,10000,this);
+        progress.setWindowTitle(QStringLiteral("進度對話方塊"));
+        progress.show();
+        for(int i= 0;i<10000; i ++){
+            progress.setValue(i);
+            qApp->processEvents();
+            if(progress.wasCanceled())
+                break;
+            qDebug()<<i;
+        }
+        progress.setValue(10000);
+    }
+
 }
 DesignWidget :: ~DesignWidget()
 {
 
 }
-
 
